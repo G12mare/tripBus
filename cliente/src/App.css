@@ -1,0 +1,14 @@
+.App {
+  text-align: center;
+}
+
+.fullscreen-gallery {
+  width: 100vw;
+  height: 100vh;
+}
+
+.fullscreen-gallery .image-gallery-slide img {
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+}
