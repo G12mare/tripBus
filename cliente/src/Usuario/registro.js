@@ -1,96 +1,89 @@
 import React, { useState } from 'react';
+import './registro.css';
 
 const Registro = () => {
-    // Estados para almacenar los datos del formulario
     const [nombre, setNombre] = useState('');
-    const [email, setEmail] = useState('');
+    const [correo, setCorreo] = useState('');
     const [contraseña, setContraseña] = useState('');
-    const [mensaje, setMensaje] = useState('');
+    const [telefono, setTelefono] = useState('');
+    const [direccion, setDireccion] = useState('');
+    const [imagen, setImagen] = useState(null);
 
-    // Función que se ejecuta cuando se envía el formulario
-    const handleSubmit = async (event) => {
-        event.preventDefault(); // Evita que se recargue la página
+    const handleImageChange = (event) => {
+        const file = event.target.files[0];
+        setImagen(URL.createObjectURL(file));
+    };
 
-        // Validaciones básicas (se pueden agregar más)
-        if (nombre === '' || email === '' || contraseña === '') {
-            setMensaje('Por favor, completa todos los campos.');
-            return;
-        }
-
-        // Simulación de envío de datos a un servidor
-        try {
-            // Aquí iría la lógica para enviar los datos a un servidor.
-            const response = await fetch('http://localhost:8081/registro', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ nombre, email, contraseña }),
-            });
-
-            // Verifica la respuesta del servidor
-            if (response.ok) {
-                const data = await response.json();
-                setMensaje(data.message || 'Registro exitoso');
-                // Limpiar los campos
-                setNombre('');
-                setEmail('');
-                setContraseña('');
-            } else {
-                const errorData = await response.json();
-                setMensaje(errorData.message || 'Error en el registro');
-            }
-        } catch (error) {
-            setMensaje('Error en la conexión con el servidor.');
-        }
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        // Aquí puedes agregar la lógica para enviar los datos al servidor
+        console.log({ nombre, correo, contraseña, telefono, direccion });
     };
 
     return (
-        <div className="registro-container">
-            <h1>Formulario de Registro</h1>
+        <div className="container">
+            <h2>Registro de Usuario</h2>
             <form onSubmit={handleSubmit}>
-                {/* Campo de Nombre */}
-                <div>
-                    <label htmlFor="nombre">Nombre:</label>
+                <div className="form-group">
+                    <label>Nombre</label>
                     <input
                         type="text"
-                        id="nombre"
                         value={nombre}
                         onChange={(e) => setNombre(e.target.value)}
                         required
                     />
                 </div>
-
-                {/* Campo de Correo */}
-                <div>
-                    <label htmlFor="email">Correo Electrónico:</label>
+                <div className="form-group">
+                    <label>Correo</label>
                     <input
                         type="email"
-                        id="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
+                        value={correo}
+                        onChange={(e) => setCorreo(e.target.value)}
                         required
                     />
                 </div>
-
-                {/* Campo de Contraseña */}
-                <div>
-                    <label htmlFor="contraseña">Contraseña:</label>
+                <div className="form-group">
+                    <label>Contraseña</label>
                     <input
                         type="password"
-                        id="contraseña"
                         value={contraseña}
                         onChange={(e) => setContraseña(e.target.value)}
                         required
                     />
                 </div>
-
-                {/* Botón de registro */}
-                <button type="submit">Registrarse</button>
+                <div className="form-group">
+                    <label>Teléfono</label>
+                    <input
+                        type="tel"
+                        value={telefono}
+                        onChange={(e) => setTelefono(e.target.value)}
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Dirección</label>
+                    <input
+                        type="text"
+                        value={direccion}
+                        onChange={(e) => setDireccion(e.target.value)}
+                        required
+                    />
+                </div>
+                <div className="form-group">
+                    <label>Subir Imagen</label>
+                    <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                    />
+                    {imagen && (
+                        <div className="image-preview">
+                            <img src={imagen} alt="Preview" style={{ width: '100%', borderRadius: '4px' }} />
+                        </div>
+                    )}
+                </div>
+                <button type="submit">Registrar</button>
             </form>
-
-            {/* Mostrar mensaje de éxito o error */}
-            {mensaje && <div className="mensaje">{mensaje}</div>}
         </div>
     );
 };
